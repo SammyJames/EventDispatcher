@@ -26,15 +26,27 @@ namespace Lua
     public:
         template< typename T >
         EventArgument( T value )
-        : _s( nullptr )
+        : m_type( Type::kType_Invalid )
         {
             Set< T >( value );
         }
         
         EventArgument()
         : m_type( Type::kType_Invalid )
-        , _s( nullptr )
         {
+        }
+        
+        explicit EventArgument( EventArgument&& rhs )
+        {
+            *this = std::move( rhs );
+        }
+        
+        ~EventArgument()
+        {
+            if ( m_type == Type::kType_String )
+            {
+                delete[] _s;
+            }
         }
         
         Type GetType() const { return m_type; }
@@ -42,10 +54,9 @@ namespace Lua
         template< typename T >
         void Set( T value )
         {
-            if ( m_type == Type::kType_String && _s != nullptr )
+            if ( m_type == Type::kType_String )
             {
                 delete[] _s;
-                _s = nullptr;
             }
             
             SetValue( value );
@@ -59,6 +70,33 @@ namespace Lua
             return result;
         }
         
+        EventArgument& operator=( EventArgument&& rhs )
+        {
+            switch ( rhs.GetType() )
+            {
+                case Type::kType_String:
+                    Set( rhs.Get< char* >() );
+                    break;
+                case Type::kType_Int:
+                    Set( rhs.Get< int32_t >() );
+                    break;
+                case Type::kType_UInt:
+                    Set( rhs.Get< uint32_t >() );
+                    break;
+                case Type::kType_Float:
+                    Set( rhs.Get< float >() );
+                    break;
+                case Type::kType_Bool:
+                    Set( rhs.Get< bool >() );
+                case Type::kType_Invalid:
+                default:
+                    m_type = Type::kType_Invalid;
+                    break;
+            }
+            
+            return *this;
+        }
+        
     protected:
         
         void SetValue( const char* s )
@@ -66,7 +104,7 @@ namespace Lua
             m_type = Type::kType_String;
             
             size_t len = strlen( s );
-            _s = new char[ len + 1 ];
+            _s = new char[ len ];
             strcpy( _s, s );
         }
         
@@ -121,7 +159,6 @@ namespace Lua
         
     private:
         Type m_type;
-        
         union
         {
             char*       _s;
