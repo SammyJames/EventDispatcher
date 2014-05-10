@@ -6,7 +6,9 @@
 //  Copyright (c) 2014 pawkette. All rights reserved.
 //
 
+#include <iostream>
 #include "EventDispatcher.h"
+#include "Registry.h"
 
 namespace
 {
@@ -43,17 +45,19 @@ namespace Lua
         int32_t arg_count = lua_gettop( L );
         if ( arg_count == 3 )
         {
-            luaL_argcheck( L, lua_type( L, 1 ) == LUA_TNUMBER, 1, "Expected an EventId" );
-            luaL_argcheck( L, lua_type( L, 2 ) == LUA_TNIL || lua_type( L, 2 ) == LUA_TTABLE, 2, "Expected a table or nil for scope" );
+            luaL_argcheck( L, lua_type( L, 1 ) == LUA_TNUMBER, 1,   "Expected an EventId" );
+            luaL_argcheck( L, lua_type( L, 2 ) == LUA_TTABLE, 2,    "Expected a table or nil for scope" );
             luaL_argcheck( L, lua_type( L, 3 ) == LUA_TFUNCTION, 3, "Expected a function" );
             
+            int32_t event = (int32_t)lua_tointeger( L, 1 );
+            
             lua_pushvalue( L, 2 );
-            int32_t scope = lua_ref( L, true );
+            int32_t scope = Registry::instance->AddRef( L );
             
             lua_pushvalue( L, 3 );
-            int32_t func = lua_ref( L, true );
+            int32_t func = Registry::instance->AddRef( L );
             
-            EventDispatcher::instance->RegisterEvent( (int32_t)lua_tointeger( L, 1 ), EventListener( scope, func ) );
+            EventDispatcher::instance->RegisterEvent( event, scope, func );
         }
         
         return 0;
@@ -64,37 +68,20 @@ namespace Lua
         int32_t arg_count = lua_gettop( L );
         if ( arg_count == 3 )
         {
-            luaL_argcheck( L, lua_type( L, 1 ) == LUA_TNUMBER, 1, "Expected an EventId" );
-            luaL_argcheck( L, lua_type( L, 2 ) == LUA_TNIL || lua_type( L, 2 ) == LUA_TTABLE, 2, "Expected a table or nil for scope" );
+            luaL_argcheck( L, lua_type( L, 1 ) == LUA_TNUMBER, 1,   "Expected an EventId" );
+            luaL_argcheck( L, lua_type( L, 2 ) == LUA_TTABLE, 2,    "Expected a table or nil for scope" );
             luaL_argcheck( L, lua_type( L, 3 ) == LUA_TFUNCTION, 3, "Expected an a callback function" );
-
- 
-            int32_t registry_size = luaL_getn( L, LUA_REGISTRYINDEX );
-            int32_t scope = -1;
-            for ( int32_t i = 1; i <= registry_size; ++i )
-            {
-                lua_getref( L, i );
-                if ( lua_equal( L, -1, -3 ) )
-                {
-                    scope = i;
-                    break;
-                }
-                lua_pop( L, 1 );
-            }
-
-            int32_t func = -1;
-            for ( int32_t i = 1; i <= registry_size; ++i )
-            {
-                lua_getref( L, i );
-                if ( lua_equal( L, -1, -3 ) )
-                {
-                    func = i;
-                    break;
-                }
-                lua_pop( L, 1 );
-            }
             
-            EventDispatcher::instance->ReleaseEvent( (int32_t)lua_tointeger( L, 1 ), EventListener( scope, func ) );
+            int32_t event = (int32_t)lua_tointeger( L, 1 );
+
+            lua_pushvalue( L, 2 );
+            int32_t scope = Registry::instance->ReleaseRef( L );
+            
+            lua_pushvalue( L, 3 );
+            int32_t func = Registry::instance->ReleaseRef( L );
+            
+            
+            EventDispatcher::instance->ReleaseEvent( event, scope, func );
         }
         
         return 0;
@@ -138,44 +125,30 @@ namespace Lua
         return 0;
     }
     
-    void EventDispatcher::RegisterEvent( int32_t eventId, const EventListener& listener )
+    void EventDispatcher::RegisterEvent( int32_t eventId, int32_t scope, int32_t func )
     {
-        auto first = m_eventWatchers.equal_range( eventId ).first;
-        auto last = m_eventWatchers.equal_range( eventId ).second;
+        const auto range = m_eventWatchers.equal_range( eventId );
         
-        int32_t scope = listener.GetScope();
-        int32_t func = listener.GetFunction();
-        
-        for ( auto watcher = first; watcher != last; ++watcher )
+        for ( auto watcher = range.first; watcher != range.second; ++watcher )
         {
-            const EventListener& event( watcher->second );
-            
-            if ( event.GetScope() == scope && event.GetFunction() == func )
+            if ( scope == watcher->second.first && func == watcher->second.second )
             {
                 return;
             }
         }
         
-        m_eventWatchers.insert( { eventId, listener } );
+        m_eventWatchers.emplace( std::make_pair( eventId, std::make_pair( scope, func ) ) );
     }
     
-    void EventDispatcher::ReleaseEvent( int32_t eventId, const EventListener& listener )
+    void EventDispatcher::ReleaseEvent( int32_t eventId, int32_t scope, int32_t func )
     {
-        auto first = m_eventWatchers.equal_range( eventId ).first;
-        auto last = m_eventWatchers.equal_range( eventId ).second;
-        
-        int32_t scope = listener.GetScope();
-        int32_t func = listener.GetFunction();
+        const auto range = m_eventWatchers.equal_range( eventId );
 
-        for ( auto watcher = first; watcher != last; ++watcher )
+        for ( auto watcher = range.first; watcher != range.second; ++watcher )
         {
-            const EventListener& event( watcher->second );
-            
-            if ( event.GetScope() == scope && event.GetFunction() == func )
+            if ( scope == watcher->second.first && func == watcher->second.second )
             {
-                lua_unref( L, scope );
-                lua_unref( L, func );
-                m_eventWatchers.erase( watcher );
+                watcher = m_eventWatchers.erase( watcher );
                 break;
             }
         }
@@ -183,21 +156,27 @@ namespace Lua
     
     void EventDispatcher::DispatchEvent_Internal( int32_t eventId, const EventArguments& args )
     {
-        auto first = m_eventWatchers.equal_range( eventId ).first;
-        auto last = m_eventWatchers.equal_range( eventId ).second;
+        const auto range = m_eventWatchers.equal_range( eventId );
+        std::list< std::pair< int32_t, int32_t > > temp;
         
-        for ( auto watcher = first; watcher != last; ++watcher )
+        for ( auto watcher = range.first; watcher != range.second; ++watcher )
         {
-            const EventListener& listener( watcher->second );
-            
-            lua_getref( L, listener.GetScope() );
-            lua_getref( L, listener.GetFunction() );
+            temp.emplace_back( watcher->second.first, watcher->second.second );
+        }
+        
+        for ( auto it : temp )
+        {
+            lua_getref( L, it.first );
+            lua_getref( L, it.second );
         
             lua_pushvalue( L, -2 );
             
             args.push( L );
             
-            lua_pcall( L, 1 + args.size(), 0, 0 );
+            if ( lua_pcall( L, 1 + args.size(), 0, 0 ) != 0 )
+            {
+                std::cout << "error dispatching event: " << lua_tostring( L, -1 ) << std::endl;
+            }
         }
     }
     

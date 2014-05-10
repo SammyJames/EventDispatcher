@@ -43,10 +43,10 @@ namespace Lua
         
     private:
         void DispatchEvent_Internal( int32_t eventId, const EventArguments& args );
-        void RegisterEvent( int32_t eventId, const EventListener& listener );
-        void ReleaseEvent( int32_t eventId, const EventListener& listener );
+        void RegisterEvent( int32_t eventId, int32_t scope, int32_t func );
+        void ReleaseEvent( int32_t eventId, int32_t scope, int32_t func );
         
-        std::multimap< int32_t, EventListener > m_eventWatchers;
+        std::multimap< int32_t, std::pair< int32_t, int32_t > > m_eventWatchers;
         lua_State* L;
     };
 }

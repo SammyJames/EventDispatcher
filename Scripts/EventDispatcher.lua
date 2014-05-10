@@ -2,42 +2,37 @@ print( "EventDispatcher Test" )
 
 local EventDispatcher = EventDispatcher;
 
-do
+meep = {}
+function meep:func1( ... )
+    print( "func1, callback for event 1" )
 
-    local test = {}
-    function test:func1( ... )
-        print( unpack( {...} ) )
-        print( "func1, callback for event 1" )
-    end
-
-    function test:func2( ... ) 
-        print( unpack( {...} ) )
-        print( "func2, callback for event 1" )
-
-        EventDispatcher.ReleaseEvent( 1, test, test.func1 )
-    end
-
-    function blorp( ... )
-        print( unpack( {...} ) )
-        print( "oh em gee" ) 
-
-        EventDispatcher.DispatchEvent( 2, "hi", ... ) 
-    end
-
-
-
-    EventDispatcher.RegisterEvent( 1, test, test.func1 )
-    EventDispatcher.RegisterEvent( 1, test, test.func2 )
-    EventDispatcher.RegisterEvent( 1, nil, blorp )
-
+    EventDispatcher.ReleaseEvent( 1, self, self.func1 )
 end
 
-EventDispatcher.ReleaseEvent( 1, nil, blorp )
+function meep:func2( ... ) 
+    print( "func2, callback for event 1" )
 
-local test2 = {}
-function test2:help( ... )
+    EventDispatcher.ReleaseEvent( 1, self, self.func2 )
+end
+
+EventDispatcher.RegisterEvent( 1, meep, meep.func1 )
+EventDispatcher.RegisterEvent( 1, meep, meep.func2 )
+
+x = {}
+function x:blorp( ... )
+    print( "oh em gee" ) 
+
+    EventDispatcher.ReleaseEvent( 1, self, self.blorp )
+    EventDispatcher.DispatchEvent( 2, "hi", ... ) 
+end
+
+EventDispatcher.RegisterEvent( 1, x, x.blorp )
+
+y = {}
+function y:help( ... )
     print( unpack( { ... } ) )
     print( "help, callback for event 2" )
 end
 
-EventDispatcher.RegisterEvent( 2, test2, test2.help )
+
+EventDispatcher.RegisterEvent( 2, y, y.help )

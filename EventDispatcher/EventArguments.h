@@ -20,7 +20,7 @@ namespace Lua
     class EventArguments
     {
     public:
-        explicit EventArguments() {}
+        EventArguments() {}
         
         template< typename... T >
         EventArguments( const T&... arguments )
@@ -30,37 +30,37 @@ namespace Lua
         
         inline EventArguments& operator<<( const char* s )
         {
-            m_arguments.push_back( EventArgument( s ) );
+            m_arguments.emplace_back( s );
             return *this;
         }
         
         inline EventArguments& operator<<( int32_t i )
         {
-            m_arguments.push_back( EventArgument( i ) );
+            m_arguments.emplace_back( i );
             return *this;
         }
         
         inline EventArguments& operator<<( uint32_t u )
         {
-            m_arguments.push_back( EventArgument( u ) );
+            m_arguments.emplace_back( u );
             return *this;
         }
         
         inline EventArguments& operator<<( float f )
         {
-            m_arguments.push_back( EventArgument( f ) );
+            m_arguments.emplace_back( f );
             return *this;
         }
         
         inline EventArguments& operator<<( bool b )
         {
-            m_arguments.push_back( EventArgument( b ) );
+            m_arguments.emplace_back( b );
             return *this;
         }
         
         inline EventArguments& operator<<( std::nullptr_t )
         {
-            m_arguments.push_back( EventArgument() ); //we'll use null to represent nil in lua :)
+            m_arguments.emplace_back(); //we'll use null to represent nil in lua :)
             return *this;
         }
         

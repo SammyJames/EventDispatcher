@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		D01F9259191EAF0200838A0E /* Registry.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D01F9257191EAF0200838A0E /* Registry.cpp */; };
 		D052F1EF191E44770000F09B /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D052F1EE191E44770000F09B /* main.cpp */; };
 		D052F1F1191E44770000F09B /* EventDispatcher.1 in CopyFiles */ = {isa = PBXBuildFile; fileRef = D052F1F0191E44770000F09B /* EventDispatcher.1 */; };
 		D052F264191E485C0000F09B /* liblua.a in Frameworks */ = {isa = PBXBuildFile; fileRef = D052F263191E485C0000F09B /* liblua.a */; };
@@ -27,6 +28,8 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		D01F9257191EAF0200838A0E /* Registry.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Registry.cpp; sourceTree = "<group>"; };
+		D01F9258191EAF0200838A0E /* Registry.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Registry.h; sourceTree = "<group>"; };
 		D05000AA191E7FF4007604C1 /* EventArguments.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EventArguments.h; sourceTree = "<group>"; };
 		D05000AC191E8319007604C1 /* EventArgument.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EventArgument.h; sourceTree = "<group>"; };
 		D052F1EB191E44770000F09B /* EventDispatcher */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = EventDispatcher; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -79,6 +82,8 @@
 				D052F26B191E4E170000F09B /* EventListener.h */,
 				D05000AA191E7FF4007604C1 /* EventArguments.h */,
 				D05000AC191E8319007604C1 /* EventArgument.h */,
+				D01F9257191EAF0200838A0E /* Registry.cpp */,
+				D01F9258191EAF0200838A0E /* Registry.h */,
 			);
 			path = EventDispatcher;
 			sourceTree = "<group>";
@@ -134,6 +139,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D01F9259191EAF0200838A0E /* Registry.cpp in Sources */,
 				D052F1EF191E44770000F09B /* main.cpp in Sources */,
 				D052F268191E48800000F09B /* EventDispatcher.cpp in Sources */,
 			);
