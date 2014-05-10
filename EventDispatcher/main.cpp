@@ -13,6 +13,9 @@
 
 #include "EventDispatcher.h"
 
+#define EVENT_ONE 1
+#define EVENT_TWO 2
+
 int main(int argc, const char * argv[])
 {
     lua_State* L = lua_open();
@@ -23,9 +26,10 @@ int main(int argc, const char * argv[])
     
     luaL_dofile( L, "Scripts/EventDispatcher.lua" );
     
-    Lua::EventDispatcher::instance->DispatchEvent( 1, 1, 2, 3, "four" );
-    Lua::EventDispatcher::instance->DispatchEvent( 2, nullptr, 3, 2, 1 );
-
+    
+    DISPATCH_EVENT( EVENT_ONE, 1, 2, 3, "four", 0.5f, true, INT_MAX );
+    DISPATCH_EVENT( EVENT_TWO, "five", nullptr, 0x0001, UINT_MAX, 0 );
+    
     lua_close( L );
     
     return 0;

@@ -105,7 +105,7 @@ namespace Lua
         return 0;
     }
     
-    void EventDispatcher::RegisterEvent( int32_t eventId, EventListener listener )
+    void EventDispatcher::RegisterEvent( int32_t eventId, const EventListener& listener )
     {
         auto first = m_eventWatchers.equal_range( eventId ).first;
         auto last = m_eventWatchers.equal_range( eventId ).second;
@@ -126,7 +126,7 @@ namespace Lua
         m_eventWatchers.insert( { eventId, listener } );
     }
     
-    void EventDispatcher::ReleaseEvent( int32_t eventId, EventListener listener )
+    void EventDispatcher::ReleaseEvent( int32_t eventId, const EventListener& listener )
     {
         auto first = m_eventWatchers.equal_range( eventId ).first;
         auto last = m_eventWatchers.equal_range( eventId ).second;
