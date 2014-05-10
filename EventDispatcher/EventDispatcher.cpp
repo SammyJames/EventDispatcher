@@ -73,7 +73,7 @@ namespace Lua
             int32_t scope = -1;
             for ( int32_t i = 1; i <= registry_size; ++i )
             {
-                lua_rawgeti( L, LUA_REGISTRYINDEX, i );
+                lua_getref( L, i );
                 if ( lua_equal( L, -1, -3 ) )
                 {
                     scope = i;
@@ -85,7 +85,7 @@ namespace Lua
             int32_t func = -1;
             for ( int32_t i = 1; i <= registry_size; ++i )
             {
-                lua_rawgeti( L, LUA_REGISTRYINDEX, i );
+                lua_getref( L, i );
                 if ( lua_equal( L, -1, -3 ) )
                 {
                     func = i;

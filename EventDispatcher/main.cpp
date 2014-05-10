@@ -21,9 +21,10 @@ int main(int argc, const char * argv[])
     luaL_openlibs( L );
     Lua::EventDispatcher::Register( L );
     
-    luaL_dofile( L, "EventDispatcher.lua" );
+    luaL_dofile( L, "Scripts/EventDispatcher.lua" );
     
     Lua::EventDispatcher::instance->DispatchEvent( 1 );
+    Lua::EventDispatcher::instance->DispatchEvent( 2 );
 
     lua_close( L );
     
