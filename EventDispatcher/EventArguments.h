@@ -28,6 +28,16 @@ namespace Lua
             _init( arguments... );
         }
         
+        EventArguments( EventArguments&& other )
+        {
+            *this = std::move( other );
+        }
+        
+        EventArguments( const EventArguments& other )
+        {
+            *this = other;
+        }
+        
         inline EventArguments& operator<<( const char* s )
         {
             m_arguments.emplace_back( s );
@@ -94,6 +104,26 @@ namespace Lua
                         break;
                 }
             }
+        }
+        
+        EventArguments& operator=( EventArguments&& rhs )
+        {
+            for ( auto& it : rhs.m_arguments )
+            {
+                m_arguments.emplace_back( it );
+            }
+            
+            return *this;
+        }
+        
+        EventArguments& operator=( const EventArguments& rhs )
+        {
+            for ( auto& it : rhs.m_arguments )
+            {
+                m_arguments.emplace_back( it );
+            }
+            
+            return *this;
         }
         
     protected:

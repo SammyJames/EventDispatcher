@@ -31,7 +31,12 @@ int main(int argc, const char * argv[])
     
 
     DISPATCH_EVENT( EVENT_ONE, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18 );
-    DISPATCH_EVENT( EVENT_TWO, "five", nullptr, 0x0001, UINT_MAX );
+    
+    for ( int i = 0; i < 300; ++i )
+    {
+        Lua::EventDispatcher::instance->OnUpdate();
+        DISPATCH_EVENT( EVENT_TWO, "five", nullptr, 0x0001, UINT_MAX );
+    }
     
     lua_close( L );
     

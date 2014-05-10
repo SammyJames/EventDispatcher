@@ -41,6 +41,11 @@ namespace Lua
             *this = std::move( rhs );
         }
         
+        explicit EventArgument( const EventArgument& rhs )
+        {
+            *this = rhs;
+        }
+        
         ~EventArgument()
         {
             if ( m_type == Type::kType_String )
@@ -68,6 +73,35 @@ namespace Lua
             T result;
             GetValue( &result );
             return result;
+        }
+        
+        EventArgument& operator=( const EventArgument& rhs )
+        {
+            if ( this == &rhs ) { return *this; }
+            
+            switch ( rhs.GetType() )
+            {
+                case Type::kType_String:
+                    Set( rhs.Get< char* >() );
+                    break;
+                case Type::kType_Int:
+                    Set( rhs.Get< int32_t >() );
+                    break;
+                case Type::kType_UInt:
+                    Set( rhs.Get< uint32_t >() );
+                    break;
+                case Type::kType_Float:
+                    Set( rhs.Get< float >() );
+                    break;
+                case Type::kType_Bool:
+                    Set( rhs.Get< bool >() );
+                case Type::kType_Invalid:
+                default:
+                    m_type = Type::kType_Invalid;
+                    break;
+            }
+            
+            return *this;
         }
         
         EventArgument& operator=( EventArgument&& rhs )

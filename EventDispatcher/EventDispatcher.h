@@ -18,6 +18,19 @@
 
 namespace Lua
 {
+    struct PendingEvent
+    {
+        PendingEvent( int32_t id, const EventArguments& args )
+        : eventId( id )
+        , args( args )
+        {
+            
+        }
+        
+        int32_t eventId;
+        EventArguments args;
+    };
+    
     class EventDispatcher
     {
     public:
@@ -41,12 +54,16 @@ namespace Lua
             DispatchEvent_Internal( eventId, EventArguments( args... ) );
         }
         
+        void OnUpdate();
+        
     private:
         void DispatchEvent_Internal( int32_t eventId, const EventArguments& args );
         void RegisterEvent( int32_t eventId, int32_t scope, int32_t func );
         void ReleaseEvent( int32_t eventId, int32_t scope, int32_t func );
         
         std::multimap< int32_t, std::pair< int32_t, int32_t > > m_eventWatchers;
+        std::list< std::pair< int32_t, int32_t > > m_dispatching;
+        std::list< PendingEvent > m_pending;
         lua_State* L;
     };
 }

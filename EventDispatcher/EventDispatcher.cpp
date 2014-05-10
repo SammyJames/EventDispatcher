@@ -125,6 +125,21 @@ namespace Lua
         return 0;
     }
     
+    void EventDispatcher::OnUpdate()
+    {
+        if ( !m_dispatching.empty() )
+        {
+            return;
+        }
+        
+        for ( const auto& it : m_pending )
+        {
+            DispatchEvent_Internal( it.eventId, it.args );
+        }
+        
+        m_pending.clear();
+    }
+    
     void EventDispatcher::RegisterEvent( int32_t eventId, int32_t scope, int32_t func )
     {
         const auto range = m_eventWatchers.equal_range( eventId );
@@ -156,15 +171,20 @@ namespace Lua
     
     void EventDispatcher::DispatchEvent_Internal( int32_t eventId, const EventArguments& args )
     {
+        if ( !m_dispatching.empty() )
+        {
+            m_pending.emplace_back( eventId, std::move( args ) );
+            return;
+        }
+        
         const auto range = m_eventWatchers.equal_range( eventId );
-        std::list< std::pair< int32_t, int32_t > > temp;
         
         for ( auto watcher = range.first; watcher != range.second; ++watcher )
         {
-            temp.emplace_back( watcher->second.first, watcher->second.second );
+            m_dispatching.emplace_back( watcher->second.first, watcher->second.second );
         }
         
-        for ( auto it : temp )
+        for ( auto it : m_dispatching )
         {
             lua_getref( L, it.first );
             lua_getref( L, it.second );
@@ -178,6 +198,8 @@ namespace Lua
                 std::cout << "error dispatching event: " << lua_tostring( L, -1 ) << std::endl;
             }
         }
+        
+        m_dispatching.clear();
     }
     
 }
