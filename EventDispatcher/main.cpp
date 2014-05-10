@@ -3,16 +3,30 @@
 //  EventDispatcher
 //
 //  Created by Sammy James on 5/10/14.
-//  Copyright (c) 2014 pawkett. All rights reserved.
+//  Copyright (c) 2014 pawkette. All rights reserved.
 //
 
 #include <iostream>
+#include <stdint.h>
+
+#include "lua.hpp"
+
+#include "EventDispatcher.h"
 
 int main(int argc, const char * argv[])
 {
+    lua_State* L = lua_open();
+    Lua::EventDispatcher::instance = new Lua::EventDispatcher( L );
+    
+    luaL_openlibs( L );
+    Lua::EventDispatcher::Register( L );
+    
+    luaL_dofile( L, "EventDispatcher.lua" );
+    
+    Lua::EventDispatcher::instance->DispatchEvent( 1 );
 
-    // insert code here...
-    std::cout << "Hello, World!\n";
+    lua_close( L );
+    
     return 0;
 }
 
