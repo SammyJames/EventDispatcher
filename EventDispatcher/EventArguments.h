@@ -58,6 +58,12 @@ namespace Lua
             return *this;
         }
         
+        EventArguments& operator<<( std::nullptr_t )
+        {
+            m_arguments.push_back( EventArgument() ); //we'll use null to represent nil in lua :)
+            return *this;
+        }
+        
         inline int32_t size() const { return (int32_t)m_arguments.size(); }
         
         void push( lua_State* L ) const
@@ -82,7 +88,9 @@ namespace Lua
                         break;
                     case Type::kType_Bool:
                         lua_pushboolean( L, itr->Get< bool >() );
+                    case Type::kType_Invalid:
                     default:
+                        lua_pushnil( L );
                         break;
                 }
             }
