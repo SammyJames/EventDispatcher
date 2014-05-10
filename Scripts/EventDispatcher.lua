@@ -20,6 +20,8 @@ do
     function blorp( ... )
         print( unpack( {...} ) )
         print( "oh em gee" ) 
+
+        EventDispatcher.DispatchEvent( 2, "hi", ... ) 
     end
 
 

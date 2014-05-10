@@ -102,6 +102,39 @@ namespace Lua
     
     /*static*/ int32_t EventDispatcher::DispatchEvent( lua_State* L )
     {
+        int32_t arg_count = lua_gettop( L );
+        if ( arg_count > 0 )
+        {
+            luaL_argcheck( L, lua_type( L, 1 ) == LUA_TNUMBER, 1, "Expected an EventId" );
+            
+            EventArguments args;
+            if ( arg_count > 1 )
+            {
+                for ( int32_t i = 2; i <= arg_count; ++i )
+                {
+                    switch( lua_type( L, i ) )
+                    {
+                        case LUA_TBOOLEAN:
+                            args << (bool)lua_toboolean( L, i );
+                            break;
+                        case LUA_TNUMBER:
+                            args << (float)lua_tonumber( L, i );
+                            break;
+                        case LUA_TSTRING:
+                            args << lua_tostring( L , i );
+                            break;
+                        case LUA_TNIL:
+                            args << nullptr;
+                            break;
+                        default:
+                            break;
+                    }
+                }
+            }
+            
+            EventDispatcher::instance->DispatchEvent_Internal( (int32_t)lua_tointeger( L, 1 ), args );
+        }
+        
         return 0;
     }
     
