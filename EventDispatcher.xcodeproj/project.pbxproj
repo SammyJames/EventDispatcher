@@ -27,6 +27,8 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		D05000AA191E7FF4007604C1 /* EventArguments.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EventArguments.h; sourceTree = "<group>"; };
+		D05000AC191E8319007604C1 /* EventArgument.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EventArgument.h; sourceTree = "<group>"; };
 		D052F1EB191E44770000F09B /* EventDispatcher */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = EventDispatcher; sourceTree = BUILT_PRODUCTS_DIR; };
 		D052F1EE191E44770000F09B /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
 		D052F1F0191E44770000F09B /* EventDispatcher.1 */ = {isa = PBXFileReference; lastKnownFileType = text.man; path = EventDispatcher.1; sourceTree = "<group>"; };
@@ -34,7 +36,7 @@
 		D052F266191E48800000F09B /* EventDispatcher.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = EventDispatcher.cpp; sourceTree = "<group>"; };
 		D052F267191E48800000F09B /* EventDispatcher.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EventDispatcher.h; sourceTree = "<group>"; };
 		D052F269191E4A8E0000F09B /* lua.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = lua.hpp; sourceTree = "<group>"; };
-		D052F26B191E4E170000F09B /* Event.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Event.h; sourceTree = "<group>"; };
+		D052F26B191E4E170000F09B /* EventListener.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EventListener.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -74,7 +76,9 @@
 				D052F266191E48800000F09B /* EventDispatcher.cpp */,
 				D052F267191E48800000F09B /* EventDispatcher.h */,
 				D052F269191E4A8E0000F09B /* lua.hpp */,
-				D052F26B191E4E170000F09B /* Event.h */,
+				D052F26B191E4E170000F09B /* EventListener.h */,
+				D05000AA191E7FF4007604C1 /* EventArguments.h */,
+				D05000AC191E8319007604C1 /* EventArgument.h */,
 			);
 			path = EventDispatcher;
 			sourceTree = "<group>";

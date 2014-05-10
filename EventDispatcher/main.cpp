@@ -23,8 +23,8 @@ int main(int argc, const char * argv[])
     
     luaL_dofile( L, "Scripts/EventDispatcher.lua" );
     
-    Lua::EventDispatcher::instance->DispatchEvent( 1 );
-    Lua::EventDispatcher::instance->DispatchEvent( 2 );
+    Lua::EventDispatcher::instance->DispatchEvent( 1, 1, 2, 3, "four" );
+    Lua::EventDispatcher::instance->DispatchEvent( 2, "four", 3, 2, 1 );
 
     lua_close( L );
     

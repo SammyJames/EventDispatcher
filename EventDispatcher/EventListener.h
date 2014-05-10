@@ -14,10 +14,10 @@
 
 namespace Lua
 {
-    class Event
+    class EventListener
     {
     public:
-        Event( int32_t scopeId, int32_t functionId )
+        EventListener( int32_t scopeId, int32_t functionId )
         : m_scopeId( scopeId )
         , m_functionId( functionId )
         {

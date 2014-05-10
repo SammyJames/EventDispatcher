@@ -5,17 +5,20 @@ local EventDispatcher = EventDispatcher;
 do
 
     local test = {}
-    function test:func1()
+    function test:func1( ... )
+        print( unpack( {...} ) )
         print( "func1, callback for event 1" )
     end
 
-    function test:func2() 
+    function test:func2( ... ) 
+        print( unpack( {...} ) )
         print( "func2, callback for event 1" )
 
         EventDispatcher.ReleaseEvent( 1, test, test.func1 )
     end
 
-    function blorp()
+    function blorp( ... )
+        print( unpack( {...} ) )
         print( "oh em gee" ) 
     end
 
@@ -30,7 +33,8 @@ end
 EventDispatcher.ReleaseEvent( 1, nil, blorp )
 
 local test2 = {}
-function test2:help()
+function test2:help( ... )
+    print( unpack( { ... } ) )
     print( "help, callback for event 2" )
 end
 

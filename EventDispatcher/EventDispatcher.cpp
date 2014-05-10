@@ -53,7 +53,7 @@ namespace Lua
             lua_pushvalue( L, 3 );
             int32_t func = lua_ref( L, true );
             
-            EventDispatcher::instance->RegisterEvent( (int32_t)lua_tointeger( L, 1 ), Event( scope, func ) );
+            EventDispatcher::instance->RegisterEvent( (int32_t)lua_tointeger( L, 1 ), EventListener( scope, func ) );
         }
         
         return 0;
@@ -94,7 +94,7 @@ namespace Lua
                 lua_pop( L, 1 );
             }
             
-            EventDispatcher::instance->ReleaseEvent( (int32_t)lua_tointeger( L, 1 ), Event( scope, func ) );
+            EventDispatcher::instance->ReleaseEvent( (int32_t)lua_tointeger( L, 1 ), EventListener( scope, func ) );
         }
         
         return 0;
@@ -105,7 +105,7 @@ namespace Lua
         return 0;
     }
     
-    void EventDispatcher::RegisterEvent( int32_t eventId, Event listener )
+    void EventDispatcher::RegisterEvent( int32_t eventId, EventListener listener )
     {
         auto first = m_eventWatchers.equal_range( eventId ).first;
         auto last = m_eventWatchers.equal_range( eventId ).second;
@@ -115,7 +115,7 @@ namespace Lua
         
         for ( auto watcher = first; watcher != last; ++watcher )
         {
-            const Event& event( watcher->second );
+            const EventListener& event( watcher->second );
             
             if ( event.GetScope() == scope && event.GetFunction() == func )
             {
@@ -126,7 +126,7 @@ namespace Lua
         m_eventWatchers.insert( { eventId, listener } );
     }
     
-    void EventDispatcher::ReleaseEvent( int32_t eventId, Event listener )
+    void EventDispatcher::ReleaseEvent( int32_t eventId, EventListener listener )
     {
         auto first = m_eventWatchers.equal_range( eventId ).first;
         auto last = m_eventWatchers.equal_range( eventId ).second;
@@ -136,7 +136,7 @@ namespace Lua
 
         for ( auto watcher = first; watcher != last; ++watcher )
         {
-            const Event& event( watcher->second );
+            const EventListener& event( watcher->second );
             
             if ( event.GetScope() == scope && event.GetFunction() == func )
             {
@@ -148,19 +148,23 @@ namespace Lua
         }
     }
     
-    void EventDispatcher::DispatchEvent_Internal( int32_t eventId )
+    void EventDispatcher::DispatchEvent_Internal( int32_t eventId, const EventArguments& args )
     {
         auto first = m_eventWatchers.equal_range( eventId ).first;
         auto last = m_eventWatchers.equal_range( eventId ).second;
         
         for ( auto watcher = first; watcher != last; ++watcher )
         {
-            const Event& listener( watcher->second );
+            const EventListener& listener( watcher->second );
             
             lua_getref( L, listener.GetScope() );
             lua_getref( L, listener.GetFunction() );
+        
+            lua_pushvalue( L, -2 );
             
-            lua_pcall( L, 0, 0, NULL );
+            args.push( L );
+            
+            lua_pcall( L, 1 + args.size(), 0, NULL );
         }
     }
     

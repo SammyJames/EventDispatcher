@@ -11,8 +11,10 @@
 
 #include <stdint.h>
 #include <map>
+
 #include "lua.hpp"
-#include "Event.h"
+#include "EventListener.h"
+#include "EventArguments.h"
 
 namespace Lua
 {
@@ -30,33 +32,21 @@ namespace Lua
         
         void DispatchEvent( int32_t eventId )
         {
-            DispatchEvent_Internal( eventId );
+            DispatchEvent_Internal( eventId, EventArguments() );
         }
         
-        template< typename T_0 >
-        void DispatchEvent( int32_t eventId, const T_0& _0 )
+        template< typename... T >
+        void DispatchEvent( int32_t eventId, const T&... args )
         {
-            DispatchEvent_Internal( eventId );
-        }
-        
-        template< typename T_0, typename T_1  >
-        void DispatchEvent( int32_t eventId, const T_0& _0, const T_1& _1 )
-        {
-            DispatchEvent_Internal( eventId );
-        }
-        
-        template< typename T_0, typename T_1, typename T_2  >
-        void DispatchEvent( int32_t eventId, const T_0& _0, const T_1& _1, const T_2& _2 )
-        {
-            DispatchEvent_Internal( eventId );
+            DispatchEvent_Internal( eventId, EventArguments( args... ) );
         }
         
     private:
-        void DispatchEvent_Internal( int32_t eventId );
-        void RegisterEvent( int32_t eventId, Event listener );
-        void ReleaseEvent( int32_t eventId, Event listener );
+        void DispatchEvent_Internal( int32_t eventId, const EventArguments& args );
+        void RegisterEvent( int32_t eventId, EventListener listener );
+        void ReleaseEvent( int32_t eventId, EventListener listener );
         
-        std::multimap< int32_t, Event > m_eventWatchers;
+        std::multimap< int32_t, EventListener > m_eventWatchers;
         lua_State* L;
     };
 }
