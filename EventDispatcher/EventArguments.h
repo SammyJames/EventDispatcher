@@ -6,8 +6,8 @@
 //  Copyright (c) 2014 pawkette. All rights reserved.
 //
 
-#ifndef __EventDispatcher__EventArguments__
-#define __EventDispatcher__EventArguments__
+#ifndef EventDispatcher_EventArguments_h
+#define EventDispatcher_EventArguments_h
 
 #include <stdint.h>
 #include <list>
@@ -28,37 +28,37 @@ namespace Lua
             _init( arguments... );
         }
         
-        EventArguments& operator<<( const char* s )
+        inline EventArguments& operator<<( const char* s )
         {
             m_arguments.push_back( EventArgument( s ) );
             return *this;
         }
         
-        EventArguments& operator<<( int32_t i )
+        inline EventArguments& operator<<( int32_t i )
         {
             m_arguments.push_back( EventArgument( i ) );
             return *this;
         }
         
-        EventArguments& operator<<( uint32_t u )
+        inline EventArguments& operator<<( uint32_t u )
         {
             m_arguments.push_back( EventArgument( u ) );
             return *this;
         }
         
-        EventArguments& operator<<( float f )
+        inline EventArguments& operator<<( float f )
         {
             m_arguments.push_back( EventArgument( f ) );
             return *this;
         }
         
-        EventArguments& operator<<( bool b )
+        inline EventArguments& operator<<( bool b )
         {
             m_arguments.push_back( EventArgument( b ) );
             return *this;
         }
         
-        EventArguments& operator<<( std::nullptr_t )
+        inline EventArguments& operator<<( std::nullptr_t )
         {
             m_arguments.push_back( EventArgument() ); //we'll use null to represent nil in lua :)
             return *this;
@@ -105,7 +105,7 @@ namespace Lua
         }
         
         template< typename T >
-        void _init( const T& value )
+        inline void _init( const T& value )
         {
             *this << value;
         }
@@ -115,4 +115,4 @@ namespace Lua
     };
 }
 
-#endif /* defined(__EventDispatcher__EventArguments__) */
+#endif /* defined(EventDispatcher_EventArguments_h) */

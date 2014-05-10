@@ -26,14 +26,14 @@ namespace Lua
     public:
         template< typename T >
         EventArgument( T value )
-        : _s( NULL )
+        : _s( nullptr )
         {
             Set< T >( value );
         }
         
         EventArgument()
         : m_type( Type::kType_Invalid )
-        , _s( NULL )
+        , _s( nullptr )
         {
         }
         
@@ -42,15 +42,13 @@ namespace Lua
         template< typename T >
         void Set( T value )
         {
-            Type last = m_type;
-            SetValue( value );
-            
-            if ( last == Type::kType_String &&
-                m_type != Type::kType_String )
+            if ( m_type == Type::kType_String && _s != nullptr )
             {
                 delete[] _s;
-                _s = NULL;
+                _s = nullptr;
             }
+            
+            SetValue( value );
         }
         
         template< typename T >

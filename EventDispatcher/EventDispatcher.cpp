@@ -164,7 +164,7 @@ namespace Lua
             
             args.push( L );
             
-            lua_pcall( L, 1 + args.size(), 0, NULL );
+            lua_pcall( L, 1 + args.size(), 0, 0 );
         }
     }
     

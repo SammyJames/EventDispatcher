@@ -6,8 +6,8 @@
 //  Copyright (c) 2014 pawkette. All rights reserved.
 //
 
-#ifndef __EventDispatcher__Event__
-#define __EventDispatcher__Event__
+#ifndef EventDispatcher_EventListener_h
+#define EventDispatcher_EventListener_h
 
 #include <stdint.h>
 #include "lua.hpp"
@@ -32,4 +32,4 @@ namespace Lua
     };
 }
 
-#endif /* defined(__EventDispatcher__Event__) */
+#endif /* defined(EventDispatcher_EventListener_h) */
