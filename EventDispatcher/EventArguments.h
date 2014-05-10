@@ -108,6 +108,8 @@ namespace Lua
         
         EventArguments& operator=( EventArguments&& rhs )
         {
+            if ( this == &rhs ) { return *this; }
+            
             for ( auto& it : rhs.m_arguments )
             {
                 m_arguments.emplace_back( it );
@@ -118,6 +120,8 @@ namespace Lua
         
         EventArguments& operator=( const EventArguments& rhs )
         {
+            if ( this == &rhs ) { return *this; }
+            
             for ( auto& it : rhs.m_arguments )
             {
                 m_arguments.emplace_back( it );
