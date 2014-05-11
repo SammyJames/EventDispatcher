@@ -152,7 +152,7 @@ namespace Lua
             }
         }
         
-        m_eventWatchers.emplace( std::make_pair( eventId, std::make_pair( scope, func ) ) );
+        m_eventWatchers.emplace( eventId, std::make_pair( scope, func ) );
     }
     
     void EventDispatcher::ReleaseEvent( int32_t eventId, int32_t scope, int32_t func )

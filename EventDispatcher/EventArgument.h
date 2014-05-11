@@ -23,7 +23,8 @@ namespace Lua
             kType_UInt,
             kType_Float,
             kType_Double,
-            kType_Bool
+            kType_Bool,
+            kType_Nil,
         };
         
         template< typename T >
@@ -56,7 +57,7 @@ namespace Lua
             }
         }
         
-        inline uint32_t GetType() const { return m_type; }
+        inline int32_t GetType() const { return m_type; }
         
         template< typename T >
         void Set( T value )
@@ -101,6 +102,9 @@ namespace Lua
                 case kType_Bool:
                     Set( rhs.Get< bool >() );
                     break;
+                case kType_Nil:
+                    Set( nullptr );
+                    break;
                 default:
                     m_type = kType_Invalid;
                     break;
@@ -131,6 +135,9 @@ namespace Lua
                 case kType_Bool:
                     Set( rhs.Get< bool >() );
                     break;
+                case kType_Nil:
+                    Set( nullptr );
+                    break;
                 default:
                     m_type = kType_Invalid;
                     break;
@@ -145,8 +152,7 @@ namespace Lua
         {
             m_type = kType_String;
             
-            size_t len = strlen( s );
-            _s = new char[ len ];
+            _s = new char[ strlen( s ) ];
             strcpy( _s, s );
         }
         
@@ -180,6 +186,12 @@ namespace Lua
             _b = b;
         }
         
+        void SetValue( std::nullptr_t )
+        {
+            m_type = kType_Nil;
+            _i = 0;
+        }
+        
         inline void GetValue( char** s )    const { *s = _s; }
         inline void GetValue( int32_t* i )  const { *i = _i; }
         inline void GetValue( uint32_t* u ) const { *u = _u; }
@@ -188,7 +200,7 @@ namespace Lua
         inline void GetValue( double* d )   const { *d = _d; }
         
     private:
-        uint32_t m_type;
+        int32_t m_type;
         union
         {
             char*       _s;

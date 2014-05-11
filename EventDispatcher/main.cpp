@@ -20,7 +20,7 @@
 
 int main(int argc, const char * argv[])
 {
-    lua_State* L = lua_open();
+    lua_State* L = luaL_newstate();
     Lua::EventDispatcher::instance = new Lua::EventDispatcher( L );
     Lua::Registry::instance = new Lua::Registry();
     
@@ -35,7 +35,7 @@ int main(int argc, const char * argv[])
     for ( int i = 0; i < 300; ++i )
     {
         Lua::EventDispatcher::instance->OnUpdate();
-        DISPATCH_EVENT( EVENT_TWO, "five", nullptr, 0x0001, UINT_MAX );
+        DISPATCH_EVENT( EVENT_TWO, "five", 1.f, nullptr, 0x0001, UINT_MAX );
     }
     
     lua_close( L );

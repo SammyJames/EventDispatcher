@@ -10,8 +10,8 @@
 		D01F9259191EAF0200838A0E /* Registry.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D01F9257191EAF0200838A0E /* Registry.cpp */; };
 		D052F1EF191E44770000F09B /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D052F1EE191E44770000F09B /* main.cpp */; };
 		D052F1F1191E44770000F09B /* EventDispatcher.1 in CopyFiles */ = {isa = PBXBuildFile; fileRef = D052F1F0191E44770000F09B /* EventDispatcher.1 */; };
-		D052F264191E485C0000F09B /* liblua.a in Frameworks */ = {isa = PBXBuildFile; fileRef = D052F263191E485C0000F09B /* liblua.a */; };
 		D052F268191E48800000F09B /* EventDispatcher.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D052F266191E48800000F09B /* EventDispatcher.cpp */; };
+		D0865021191FC4540047F78C /* libluajit.a in Frameworks */ = {isa = PBXBuildFile; fileRef = D0865020191FC4540047F78C /* libluajit.a */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -35,10 +35,11 @@
 		D052F1EB191E44770000F09B /* EventDispatcher */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = EventDispatcher; sourceTree = BUILT_PRODUCTS_DIR; };
 		D052F1EE191E44770000F09B /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
 		D052F1F0191E44770000F09B /* EventDispatcher.1 */ = {isa = PBXFileReference; lastKnownFileType = text.man; path = EventDispatcher.1; sourceTree = "<group>"; };
-		D052F263191E485C0000F09B /* liblua.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = liblua.a; path = "External/lua-5.1.5/src/liblua.a"; sourceTree = "<group>"; };
 		D052F266191E48800000F09B /* EventDispatcher.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = EventDispatcher.cpp; sourceTree = "<group>"; };
 		D052F267191E48800000F09B /* EventDispatcher.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EventDispatcher.h; sourceTree = "<group>"; };
 		D052F269191E4A8E0000F09B /* lua.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = lua.hpp; sourceTree = "<group>"; };
+		D0865020191FC4540047F78C /* libluajit.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libluajit.a; path = "External/LuaJIT-2.0.3/src/libluajit.a"; sourceTree = "<group>"; };
+		D0A7DCE8191FC6CA00D9B4B4 /* liblua.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = liblua.a; path = "External/lua-5.1.5/src/liblua.a"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -46,7 +47,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				D052F264191E485C0000F09B /* liblua.a in Frameworks */,
+				D0865021191FC4540047F78C /* libluajit.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -56,7 +57,8 @@
 		D052F1E2191E44770000F09B = {
 			isa = PBXGroup;
 			children = (
-				D052F263191E485C0000F09B /* liblua.a */,
+				D0A7DCE8191FC6CA00D9B4B4 /* liblua.a */,
+				D0865020191FC4540047F78C /* libluajit.a */,
 				D052F1ED191E44770000F09B /* EventDispatcher */,
 				D052F1EC191E44770000F09B /* Products */,
 			);
@@ -237,9 +239,21 @@
 		D052F1F5191E44780000F09B /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				HEADER_SEARCH_PATHS = (
+					"$(inherited)",
+					/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include,
+					"$(External)/LuaJIT-2.0.3/src",
+				);
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
+					"$(External)/LuaJIT-2.0.3/src",
 					"$(PROJECT_DIR)/External/lua-5.1.5/src",
+				);
+				OTHER_LDFLAGS = (
+					"-pagezero_size",
+					10000,
+					"-image_base",
+					100000000,
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
@@ -248,9 +262,21 @@
 		D052F1F6191E44780000F09B /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				HEADER_SEARCH_PATHS = (
+					"$(inherited)",
+					/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include,
+					"$(External)/LuaJIT-2.0.3/src",
+				);
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
+					"$(External)/LuaJIT-2.0.3/src",
 					"$(PROJECT_DIR)/External/lua-5.1.5/src",
+				);
+				OTHER_LDFLAGS = (
+					"-pagezero_size",
+					10000,
+					"-image_base",
+					100000000,
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
