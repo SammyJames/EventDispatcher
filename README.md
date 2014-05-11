@@ -3,14 +3,20 @@ EventDispatcher
 
 Lua event registry / dispatcher
 
-USAGE
------
+Lua Usage
+----------
 
 #### Registering Events
-`` EventManager.RegisterEvent( eventId:Number, scope:Table, callack:Function ) ``
+`` EventDispatcher.RegisterEvent( eventId:Number, scope:Table, callack:Function ) ``
 
 #### Unregistering Events
-`` EventManager.ReleaseEvent( eventId:Number, scope:Table, callback:Function ) ``
+`` EventDispatcher.ReleaseEvent( eventId:Number, scope:Table, callback:Function ) ``
 
 #### Dispatching Events
-`` EventManager.DispatchEvent( eventId:Number, ... ) ``
+`` EventDispatcher.DispatchEvent( eventId:Number, ... ) ``
+
+C++ Usage
+----------
+
+#### Dispatching Events
+`` DISPATCH_EVENT( eventId:int, ... ) ``
