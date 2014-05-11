@@ -39,7 +39,6 @@
 		D052F266191E48800000F09B /* EventDispatcher.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = EventDispatcher.cpp; sourceTree = "<group>"; };
 		D052F267191E48800000F09B /* EventDispatcher.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EventDispatcher.h; sourceTree = "<group>"; };
 		D052F269191E4A8E0000F09B /* lua.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = lua.hpp; sourceTree = "<group>"; };
-		D052F26B191E4E170000F09B /* EventListener.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EventListener.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -79,7 +78,6 @@
 				D052F266191E48800000F09B /* EventDispatcher.cpp */,
 				D052F267191E48800000F09B /* EventDispatcher.h */,
 				D052F269191E4A8E0000F09B /* lua.hpp */,
-				D052F26B191E4E170000F09B /* EventListener.h */,
 				D05000AA191E7FF4007604C1 /* EventArguments.h */,
 				D05000AC191E8319007604C1 /* EventArgument.h */,
 				D01F9257191EAF0200838A0E /* Registry.cpp */,

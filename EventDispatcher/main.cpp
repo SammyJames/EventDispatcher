@@ -30,7 +30,7 @@ int main(int argc, const char * argv[])
     luaL_dofile( L, "Scripts/EventDispatcher.lua" );
     
 
-    DISPATCH_EVENT( EVENT_ONE, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18 );
+    DISPATCH_EVENT( EVENT_ONE, 1, 2.5, INT_MAX, 0x11143, false, nullptr );
     
     for ( int i = 0; i < 300; ++i )
     {

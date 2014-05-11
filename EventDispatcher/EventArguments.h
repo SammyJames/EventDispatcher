@@ -62,6 +62,12 @@ namespace Lua
             return *this;
         }
         
+        inline EventArguments& operator<<( double d )
+        {
+            m_arguments.emplace_back( d );
+            return *this;
+        }
+        
         inline EventArguments& operator<<( bool b )
         {
             m_arguments.emplace_back( b );
@@ -93,11 +99,15 @@ namespace Lua
                     case Type::kType_UInt:
                         lua_pushinteger( L, itr->Get< uint32_t >() );
                         break;
+                    case Type::kType_Double:
+                        lua_pushnumber( L, itr->Get< double >() );
+                        break;
                     case Type::kType_Float:
                         lua_pushnumber( L, itr->Get< float >() );
                         break;
                     case Type::kType_Bool:
                         lua_pushboolean( L, itr->Get< bool >() );
+                        break;
                     case Type::kType_Invalid:
                     default:
                         lua_pushnil( L );

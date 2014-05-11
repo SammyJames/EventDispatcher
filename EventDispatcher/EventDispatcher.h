@@ -13,7 +13,6 @@
 #include <map>
 
 #include "lua.hpp"
-#include "EventListener.h"
 #include "EventArguments.h"
 
 namespace Lua

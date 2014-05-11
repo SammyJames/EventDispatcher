@@ -18,6 +18,7 @@ namespace Lua
         kType_Int,
         kType_UInt,
         kType_Float,
+        kType_Double,
         kType_Bool
     };
     
@@ -90,6 +91,9 @@ namespace Lua
                 case Type::kType_UInt:
                     Set( rhs.Get< uint32_t >() );
                     break;
+                case Type::kType_Double:
+                    Set( rhs.Get< double >() );
+                    break;
                 case Type::kType_Float:
                     Set( rhs.Get< float >() );
                     break;
@@ -117,11 +121,15 @@ namespace Lua
                 case Type::kType_UInt:
                     Set( rhs.Get< uint32_t >() );
                     break;
+                case Type::kType_Double:
+                    Set( rhs.Get< double >() );
+                    break;
                 case Type::kType_Float:
                     Set( rhs.Get< float >() );
                     break;
                 case Type::kType_Bool:
                     Set( rhs.Get< bool >() );
+                    break;
                 case Type::kType_Invalid:
                 default:
                     m_type = Type::kType_Invalid;
@@ -154,6 +162,12 @@ namespace Lua
             _u = u;
         }
         
+        void SetValue( double d )
+        {
+            m_type = Type::kType_Double;
+            _d = d;
+        }
+        
         void SetValue( float f )
         {
             m_type = Type::kType_Float;
@@ -166,30 +180,12 @@ namespace Lua
             _b = b;
         }
         
-        void GetValue( char** s ) const
-        {
-            *s = _s;
-        }
-        
-        void GetValue( int32_t* i ) const
-        {
-            *i = _i;
-        }
-        
-        void GetValue( uint32_t* u ) const
-        {
-            *u = _u;
-        }
-        
-        void GetValue( float* f ) const
-        {
-            *f = _f;
-        }
-        
-        void GetValue( bool* b ) const
-        {
-            *b = _b;
-        }
+        inline void GetValue( char** s )    const { *s = _s; }
+        inline void GetValue( int32_t* i )  const { *i = _i; }
+        inline void GetValue( uint32_t* u ) const { *u = _u; }
+        inline void GetValue( float* f )    const { *f = _f; }
+        inline void GetValue( bool* b )     const { *b = _b; }
+        inline void GetValue( double* d )   const { *d = _d; }
         
     private:
         Type m_type;
@@ -199,6 +195,7 @@ namespace Lua
             int32_t     _i;
             uint32_t    _u;
             float       _f;
+            double      _d;
             bool        _b;
         };
     };
