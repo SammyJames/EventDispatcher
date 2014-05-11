@@ -45,9 +45,9 @@ namespace Lua
         int32_t arg_count = lua_gettop( L );
         if ( arg_count == 3 )
         {
-            luaL_argcheck( L, lua_type( L, 1 ) == LUA_TNUMBER, 1,   "Expected an EventId" );
-            luaL_argcheck( L, lua_type( L, 2 ) == LUA_TTABLE, 2,    "Expected a table or nil for scope" );
-            luaL_argcheck( L, lua_type( L, 3 ) == LUA_TFUNCTION, 3, "Expected a function" );
+            luaL_argcheck( L, lua_isnumber( L, 1 ),     1,  "Expected an EventId" );
+            luaL_argcheck( L, lua_istable( L, 2 ),      2,  "Expected a table or nil for scope" );
+            luaL_argcheck( L, lua_isfunction( L, 3 ),   3,  "Expected an a callback function" );
             
             int32_t event = (int32_t)lua_tointeger( L, 1 );
             
@@ -68,9 +68,9 @@ namespace Lua
         int32_t arg_count = lua_gettop( L );
         if ( arg_count == 3 )
         {
-            luaL_argcheck( L, lua_type( L, 1 ) == LUA_TNUMBER, 1,   "Expected an EventId" );
-            luaL_argcheck( L, lua_type( L, 2 ) == LUA_TTABLE, 2,    "Expected a table or nil for scope" );
-            luaL_argcheck( L, lua_type( L, 3 ) == LUA_TFUNCTION, 3, "Expected an a callback function" );
+            luaL_argcheck( L, lua_isnumber( L, 1 ),     1,  "Expected an EventId" );
+            luaL_argcheck( L, lua_istable( L, 2 ),      2,  "Expected a table or nil for scope" );
+            luaL_argcheck( L, lua_isfunction( L, 3 ),   3,  "Expected an a callback function" );
             
             int32_t event = (int32_t)lua_tointeger( L, 1 );
 
@@ -105,7 +105,7 @@ namespace Lua
                             args << (bool)lua_toboolean( L, i );
                             break;
                         case LUA_TNUMBER:
-                            args << (float)lua_tonumber( L, i );
+                            args << lua_tonumber( L, i );
                             break;
                         case LUA_TSTRING:
                             args << lua_tostring( L , i );

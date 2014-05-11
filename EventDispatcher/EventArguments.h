@@ -90,25 +90,24 @@ namespace Lua
             {
                 switch ( itr->GetType() )
                 {
-                    case Type::kType_String:
+                    case EventArgument::kType_String:
                         lua_pushstring( L, itr->Get< char* >() );
                         break;
-                    case Type::kType_Int:
+                    case EventArgument::kType_Int:
                         lua_pushinteger( L, itr->Get< int32_t >() );
                         break;
-                    case Type::kType_UInt:
+                    case EventArgument::kType_UInt:
                         lua_pushinteger( L, itr->Get< uint32_t >() );
                         break;
-                    case Type::kType_Double:
+                    case EventArgument::kType_Double:
                         lua_pushnumber( L, itr->Get< double >() );
                         break;
-                    case Type::kType_Float:
+                    case EventArgument::kType_Float:
                         lua_pushnumber( L, itr->Get< float >() );
                         break;
-                    case Type::kType_Bool:
+                    case EventArgument::kType_Bool:
                         lua_pushboolean( L, itr->Get< bool >() );
                         break;
-                    case Type::kType_Invalid:
                     default:
                         lua_pushnil( L );
                         break;

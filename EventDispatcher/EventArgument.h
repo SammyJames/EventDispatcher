@@ -11,29 +11,30 @@
 
 namespace Lua
 {
-    enum Type
-    {
-        kType_Invalid = -1,
-        kType_String,
-        kType_Int,
-        kType_UInt,
-        kType_Float,
-        kType_Double,
-        kType_Bool
-    };
     
     class EventArgument
     {
     public:
+        enum
+        {
+            kType_Invalid = -1,
+            kType_String,
+            kType_Int,
+            kType_UInt,
+            kType_Float,
+            kType_Double,
+            kType_Bool
+        };
+        
         template< typename T >
         EventArgument( T value )
-        : m_type( Type::kType_Invalid )
+        : m_type( kType_Invalid )
         {
             Set< T >( value );
         }
         
         EventArgument()
-        : m_type( Type::kType_Invalid )
+        : m_type( kType_Invalid )
         {
         }
         
@@ -49,18 +50,18 @@ namespace Lua
         
         ~EventArgument()
         {
-            if ( m_type == Type::kType_String )
+            if ( m_type == kType_String )
             {
                 delete[] _s;
             }
         }
         
-        Type GetType() const { return m_type; }
+        inline uint32_t GetType() const { return m_type; }
         
         template< typename T >
         void Set( T value )
         {
-            if ( m_type == Type::kType_String )
+            if ( m_type == kType_String )
             {
                 delete[] _s;
             }
@@ -69,7 +70,7 @@ namespace Lua
         }
         
         template< typename T >
-        T Get() const
+        inline T Get() const
         {
             T result;
             GetValue( &result );
@@ -82,26 +83,26 @@ namespace Lua
             
             switch ( rhs.GetType() )
             {
-                case Type::kType_String:
+                case kType_String:
                     Set( rhs.Get< char* >() );
                     break;
-                case Type::kType_Int:
+                case kType_Int:
                     Set( rhs.Get< int32_t >() );
                     break;
-                case Type::kType_UInt:
+                case kType_UInt:
                     Set( rhs.Get< uint32_t >() );
                     break;
-                case Type::kType_Double:
+                case kType_Double:
                     Set( rhs.Get< double >() );
                     break;
-                case Type::kType_Float:
+                case kType_Float:
                     Set( rhs.Get< float >() );
                     break;
-                case Type::kType_Bool:
+                case kType_Bool:
                     Set( rhs.Get< bool >() );
-                case Type::kType_Invalid:
+                    break;
                 default:
-                    m_type = Type::kType_Invalid;
+                    m_type = kType_Invalid;
                     break;
             }
             
@@ -112,27 +113,26 @@ namespace Lua
         {
             switch ( rhs.GetType() )
             {
-                case Type::kType_String:
+                case kType_String:
                     Set( rhs.Get< char* >() );
                     break;
-                case Type::kType_Int:
+                case kType_Int:
                     Set( rhs.Get< int32_t >() );
                     break;
-                case Type::kType_UInt:
+                case kType_UInt:
                     Set( rhs.Get< uint32_t >() );
                     break;
-                case Type::kType_Double:
+                case kType_Double:
                     Set( rhs.Get< double >() );
                     break;
-                case Type::kType_Float:
+                case kType_Float:
                     Set( rhs.Get< float >() );
                     break;
-                case Type::kType_Bool:
+                case kType_Bool:
                     Set( rhs.Get< bool >() );
                     break;
-                case Type::kType_Invalid:
                 default:
-                    m_type = Type::kType_Invalid;
+                    m_type = kType_Invalid;
                     break;
             }
             
@@ -143,7 +143,7 @@ namespace Lua
         
         void SetValue( const char* s )
         {
-            m_type = Type::kType_String;
+            m_type = kType_String;
             
             size_t len = strlen( s );
             _s = new char[ len ];
@@ -152,31 +152,31 @@ namespace Lua
         
         void SetValue( int32_t i )
         {
-            m_type = Type::kType_Int;
+            m_type = kType_Int;
             _i = i;
         }
         
         void SetValue( uint32_t u )
         {
-            m_type = Type::kType_UInt;
+            m_type = kType_UInt;
             _u = u;
         }
         
         void SetValue( double d )
         {
-            m_type = Type::kType_Double;
+            m_type = kType_Double;
             _d = d;
         }
         
         void SetValue( float f )
         {
-            m_type = Type::kType_Float;
+            m_type = kType_Float;
             _f = f;
         }
         
         void SetValue( bool b )
         {
-            m_type = Type::kType_Bool;
+            m_type = kType_Bool;
             _b = b;
         }
         
@@ -188,7 +188,7 @@ namespace Lua
         inline void GetValue( double* d )   const { *d = _d; }
         
     private:
-        Type m_type;
+        uint32_t m_type;
         union
         {
             char*       _s;
